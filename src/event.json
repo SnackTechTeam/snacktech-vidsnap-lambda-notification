@@ -3,7 +3,7 @@
       {
         "messageId": "1",
         "receiptHandle": "abc",
-        "body": "{\"name\":\"Rafael\", \"email\":\"rafael.dgs.1993@gmail.com\",\"nameVideo\":\"video.mp4\",\"status\":\"falha\"}",
+        "body": "{\"Email\":\"rafael.dgs.1993@gmail.com\",\"NomeVideo\":\"video.mp4\",\"Status\":\"FinalizadoComErro\"}",
         "attributes": {},
         "messageAttributes": {},
         "md5OfBody": "string",

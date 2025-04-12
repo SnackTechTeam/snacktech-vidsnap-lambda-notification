@@ -1,11 +1,12 @@
 import json
 import smtplib
+import os
 from email.mime.text import MIMEText
 from pathlib import Path
 from string import Template
 
-gmail_user = "teste19930902@gmail.com"
-gmail_pass = "oymyvypqpibxomgi"
+mail_user = os.environ['MAIL_USER']
+mail_pass = os.environ['MAIL_PASS']
 
 TEMPLATE_DIR = Path(__file__).parent / 'templates'
 
@@ -23,8 +24,8 @@ def send_email(to_email,subject, html_body):
     msg["Subject"] = subject
 
     with smtplib.SMTP_SSL("smtp.gmail.com",465) as smtp:
-        smtp.login(gmail_user,gmail_pass)
-        smtp.sendmail(gmail_user, to_email,msg.as_string())
+        smtp.login(mail_user,mail_pass)
+        smtp.sendmail(mail_user, to_email,msg.as_string())
 
 
 def handler (event, context):    
@@ -32,11 +33,10 @@ def handler (event, context):
         for record in event['Records']:
             body = json.loads(record['body'])
             print(f"Mensagem recebida: {body}...")
-
-            name = body["name"]
-            status = body["status"]
-            to_email = body["email"]
-            subject = f"{name} seu vídeo foi processado com {status}!"
+            
+            status = body["Status"]
+            to_email = body["Email"]
+            subject = f"Seu vídeo foi processado!"
 
             template = load_template(status)
 
