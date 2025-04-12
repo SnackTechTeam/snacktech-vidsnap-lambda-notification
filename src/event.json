@@ -1,0 +1,16 @@
+{
+    "Records": [
+      {
+        "messageId": "1",
+        "receiptHandle": "abc",
+        "body": "{\"Email\":\"rafael.dgs.1993@gmail.com\",\"NomeVideo\":\"video.mp4\",\"Status\":\"FinalizadoComErro\"}",
+        "attributes": {},
+        "messageAttributes": {},
+        "md5OfBody": "string",
+        "eventSource": "aws:sqs",
+        "eventSourceARN": "arn:aws:sqs:us-east-1:123456789012:MinhaFila",
+        "awsRegion": "us-east-1"
+      }
+    ]
+  }
+  
