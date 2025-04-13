@@ -1,0 +1,43 @@
+name: Deploy to AWS
+on:
+  push:
+    branches:
+      - main
+      - deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS CLI
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ secrets.AWS_SECRET_ACCESS_TOKEN }}
+        aws-region: ${{ vars.AWS_REGION }}
+    
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.5.7 # Ajuste para a versão do Terraform utilizada
+
+     -name: Terraform Init
+      run: terraform init -backend-config="bucket=${{ vars.BACKEND_BUCKET_NAME }}" -backend-config="key=${{ vars.BACKEND_BUCKET_KEY }}" -backend-config="region=${{ vars.AWS_REGION }}"
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      env:
+        LAMBDA_ENVIRONMENT_VARIABLES: "{\"MAIL_USER\": \"${{ vars.MAIL_USER }}\",\"MAIL_PASS\":\"${{ secrets.MAIL_PASS }}\"}"
+      run: terraform plan -out=tfplan -var="regionDefault=${{ vars.AWS_REGION }}" -var="projectName=${{ vars.PROJECT_NAME }}" -var="imageUri=$IMAGE_URI" -var="lambdaEnvironmentVariables=$LAMBDA_ENVIRONMENT_VARIABLES" -var="serviceEndpoint=${{ vars.API_SERVICE_ENDPOINT }}"
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve tfplan
