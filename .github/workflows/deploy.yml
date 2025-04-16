@@ -38,9 +38,9 @@ jobs:
       run: | 
         terraform plan -out=tfplan \
         -var="regionDefault=${{ vars.AWS_REGION }}" \
-        -var="mailUser=${{ vars.VIDEOS_NOTIFICATION_MAIL_USER }}" \ 
+        -var="mailUser=${{ vars.VIDEOS_NOTIFICATION_MAIL_USER }}" \
         -var="mailPass=${{ secrets.VIDEOS_NOTIFICATION_MAIL_PASS }}" \
-        -var="sqsQueueName=${{ vars.VIDEOS_NOTIFICATION_SQS_NAME }}" 
+        -var="sqsQueueName=${{ vars.VIDEOS_NOTIFICATION_SQS_NAME }}"
 
     - name: Terraform Apply
       run: terraform apply -auto-approve tfplan
