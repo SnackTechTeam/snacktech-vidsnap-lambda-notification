@@ -35,8 +35,6 @@ jobs:
       run: terraform validate
 
     - name: Terraform Plan
-      env:
-        LAMBDA_ENVIRONMENT_VARIABLES: "{\"MAIL_USER\": \"${{ vars.MAIL_USER }}\",\"MAIL_PASS\":\"${{ secrets.MAIL_PASS }}\"}"
       run: | 
         terraform plan -out=tfplan \
         -var="regionDefault=${{ vars.AWS_REGION }}" \
