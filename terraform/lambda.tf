@@ -18,7 +18,7 @@ resource "aws_lambda_event_source_mapping" "sqs_to_lambda" {
 resource "aws_lambda_function" "lambda" {
   filename         = "${path.module}/lambda_function.zip"
   function_name    = "vidsnap-notification"
-  role             = aws_iam_role.lambda_exec.arn
+  role             = data.aws_iam_role.labrole.arn
   handler          = "lambda_function.handler"
   runtime          = "python3.10"
   source_code_hash = filebase64sha256("${path.module}/lambda_function.zip")
