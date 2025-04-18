@@ -42,7 +42,6 @@ jobs:
             [paths]
             source =
                 src
-                */snacktech-vidsnap-lambda-notification/src
   
             [report]
             omit =
