@@ -34,12 +34,7 @@ jobs:
       - name: Run tests and generate lcov
         run: |
           pytest --cov=. --cov-report=xml:coverage.xml
-
-      - name: Confirm coverage.lcov
-        run: |
-          ls -l coverage.lcov
-          grep SF: coverage.lcov
-      
+     
       - name: Runs SonarQube Scanner
         uses: SonarSource/sonarqube-scan-action@v5
         env:
