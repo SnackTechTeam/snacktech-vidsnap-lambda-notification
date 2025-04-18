@@ -38,6 +38,7 @@ jobs:
             cat <<EOF > .coveragerc
             [run]
             source = src
+            relative_files = True
   
             [paths]
             source =
