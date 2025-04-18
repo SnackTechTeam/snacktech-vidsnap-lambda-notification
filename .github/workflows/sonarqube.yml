@@ -37,6 +37,11 @@ jobs:
         run: |
           poetry run coverage run -m pytest
           poetry run coverage-lcov --output_file_path coverage.lcov
+
+      - name: Debug - check coverage.lcov
+        run: |
+          ls -l
+          cat coverage.lcov || echo "coverage.lcov not found"
       
       - name: Runs SonarQube Scanner
         uses: SonarSource/sonarqube-scan-action@v5
