@@ -31,18 +31,13 @@ jobs:
       - name: Install dependencies with Poetry
         run: |
           poetry install --no-root  # Instala as dependências do projeto, sem instalar o próprio projeto
-          poetry add --dev pytest-cov
+          poetry add --dev pytest-cov coverage-lcov
 
-      - name: Run tests with pytest and generate coverage
+      - name: Run tests and generate lcov
         run: |
-          poetry run pytest --maxfail=1 --disable-warnings --cov=src --cov-report=xml  # --cov=src ajusta para a pasta de código
-          
-      - name: Upload coverage report
-        uses: codecov/codecov-action@v3
-        with:
-          file: coverage.xml  # Arquivo de cobertura gerado pelo pytest com --cov-report=xml
+          poetry run coverage run -m pytest
+          poetry run coverage-lcov -o coverage.lcov
       
-      - uses: actions/checkout@v4
       - name: Runs SonarQube Scanner
         uses: SonarSource/sonarqube-scan-action@v5
         env:
