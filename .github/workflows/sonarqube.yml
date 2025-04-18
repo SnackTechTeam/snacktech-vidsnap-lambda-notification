@@ -2,7 +2,7 @@ name: sonarqube
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
   push:
     branches: [ "develop" ]
 
@@ -12,6 +12,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' 
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH  # Adiciona o caminho do Poetry
+
+      - name: Install dependencies with Poetry
+        run: |
+          poetry install --no-root  # Instala as dependências do projeto, sem instalar o próprio projeto
+          poetry add --dev pytest-cov
+
+      - name: Run tests with pytest and generate coverage
+        run: |
+          poetry run pytest --maxfail=1 --disable-warnings --cov=src --cov-report=xml  # --cov=src ajusta para a pasta de código
+          
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v3
+        with:
+          file: coverage.xml  # Arquivo de cobertura gerado pelo pytest com --cov-report=xml
+      
       - uses: actions/checkout@v4
       - name: Runs SonarQube Scanner
         uses: SonarSource/sonarqube-scan-action@v5
