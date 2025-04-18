@@ -13,7 +13,7 @@ variable "mailPass"{
   default = ""
 }
 
-variable "sqsQueueArn"{
+variable "sqsQueueName"{
   description = "ARN da fila de notificacao"
-  default = "arn:aws:sqs:us-east-1:000000000000:notificacao-email"
+  default = "sqs-video-notification"
 }
