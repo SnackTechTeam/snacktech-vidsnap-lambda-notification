@@ -17,42 +17,23 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10' 
 
-      - name: Install Poetry
+      - name: Install dependencies
         run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "$HOME/.local/bin" >> $GITHUB_PATH  # Adiciona o caminho do Poetry
-
-      - name: Install dependencies with Poetry
-        run: |
-          poetry install --no-root  # Instala as dependências do projeto, sem instalar o próprio projeto
-          poetry add --dev pytest pytest-cov coverage-lcov
-
-      - name: Create .coveragerc
-        run: |
-            cat <<EOF > .coveragerc
-            [run]
-            source = src
-            relative_files = True
-  
-            [paths]
-            source =
-                src
-  
-            [report]
-            omit =
-                tests/*
-            EOF
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest pytest-cov
 
       - name: Run tests and generate lcov
         run: |
-          poetry run coverage run --rcfile=.coveragerc -m pytest
-          poetry run coverage-lcov --output_file_path coverage.lcov
+          pytest --cov=. --cov-report=xml:coverage.xml
 
       - name: Confirm coverage.lcov
         run: |
