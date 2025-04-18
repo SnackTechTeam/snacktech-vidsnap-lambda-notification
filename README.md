@@ -13,6 +13,10 @@ Lambda que atuará em enviar notificações por e-mail a usuários do VidSnap qu
 
 Possui todo o código em Python para coletar o evento e fazer o disparo de e-mail que deve vir dentro do evento.
 
+### tests/test_lambda_function.py
+
+Arquivo de teste unitário do código da Function
+
 ### Terraform
 
 - [`lambda.tf`](terraform/lambda.tf): Constrói a Function a configura o trigger a uma fila SQS que já deve existir
