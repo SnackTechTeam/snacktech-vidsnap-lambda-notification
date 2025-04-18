@@ -31,17 +31,33 @@ jobs:
       - name: Install dependencies with Poetry
         run: |
           poetry install --no-root  # Instala as dependências do projeto, sem instalar o próprio projeto
-          poetry add --dev pytest-cov coverage-lcov
+          poetry add --dev pytest pytest-cov coverage-lcov
+
+          - name: Create .coveragerc
+          run: |
+            cat <<EOF > .coveragerc
+            [run]
+            source = src
+  
+            [paths]
+            source =
+                src
+                */snacktech-vidsnap-lambda-notification/src
+  
+            [report]
+            omit =
+                tests/*
+            EOF
 
       - name: Run tests and generate lcov
         run: |
           poetry run coverage run --rcfile=.coveragerc -m pytest
           poetry run coverage-lcov --output_file_path coverage.lcov
 
-      - name: Debug - check coverage.lcov
+      - name: Confirm coverage.lcov
         run: |
-          ls -l
-          cat coverage.lcov || echo "coverage.lcov not found"
+          ls -l coverage.lcov
+          grep SF: coverage.lcov
       
       - name: Runs SonarQube Scanner
         uses: SonarSource/sonarqube-scan-action@v5
